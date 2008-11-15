@@ -1,0 +1,57 @@
+= YAPS
+
+==== An object-oriented JavaScript framework for Facebook
+
+Yaps is a JavaScript framework that aims to ease development of dynamic 
+web applications under Facebook Application plateform.  
+
+It's deeply inspired form the Prototype framework (http://prototypejs.org) for 
+the basic common features and form Sriptaculous library (http://script.aculo.us/)
+for the specific classes.
+
+=== Targeted platforms
+
+We try to make our codes usable on every plateforme.
+For now, it has been tested only on :
+
+* Mozilla Firefox 3
+* Apple Safari 3.1.2
+
+== Using Yaps
+
+To use Yaps in your Facebook application, download the latest release from the 
+Yaps web site (http://labs.sociabliz.com/yaps) and copy javascript files to a 
+suitable location. Then include it in your HTML/FBML like so:
+
+  <script src="/path/to/base.js"></script>
+
+If you need special feature like drag & dropping classes, inlude them after de 
+base.js file like so :
+
+  <script src="/path/to/dragdrop.js"></script>
+
+== Contributing to Yaps
+
+Check out the Yaps source with 
+  $ git clone git://github.com/meuble/yaps.git
+
+
+For now, we prefere that you fork the git repository and submit merge request.
+
+== Documentation
+
+Ther isn't any Yaps specific documentation.
+
+Since Yaps try to be a copycat library, you can still watch throught Prototype or 
+Scriptaculous documentation to find out how Yaps works.
+
+	http://prototypejs.org/api
+	http://github.com/madrobby/scriptaculous/wikis
+	
+Reference about Facebook FBJS can be found here : 
+
+	http://wiki.developers.facebook.com/index.php/FBJS
+
+== License
+
+Yaps is licensed under the terms of the MIT License, see the included MIT-LICENSE file.
