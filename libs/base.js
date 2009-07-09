@@ -311,52 +311,78 @@ Form.serialize = function(form_element) {
 	return param_string;
 };
 
-Ajax.Updater = function (container,url,options) {
-  this.container = container;
-	this.url=url;
-	this.ajax = new Ajax();
-	this.ajax.requireLogin = 1;
-	if (options["onSuccess"]) {
-		this.ajax.responseType = Ajax.JSON;
-		this.ajax.ondone = options["onSuccess"];
-	} else {
-		this.ajax.responseType = Ajax.FBML;
+Ajax.Request = Class.create({
+	initialize: function(url, options) {
+		var defaults = {
+			responseType: Ajax.JSON,
+			onSuccess: Prototype.emptyFunction,
+			onComplete: Prototype.emptyFunction,
+			onFailure: Prototype.emptyFunction,
+			onLoading: Prototype.emptyFunction,
+			requireLogin: true,
+			parameters: "",
+			context: null
+		};
+		
+		this._options = extend_instance(defaults, options || {});
+		this._url = url;
+		
+		this.ajax = new Ajax;
+
+		this.prepare();
+		this.request();
+	},
+	
+	prepare: function() {
+		this.ajax.responseType = this._options.responseType;
+		this.ajax.requireLogin = this._options.requireLogin ? 1 : 0;
 		this.ajax.ondone = function(data) {
-		  $(container).setInnerFBML(data);
+			if (this._options.context != null) {
+				this._options.onSuccess.call(this._options.context, data);
+				this._options.onComplete.call(this._options.context, data);
+			} else {
+				this._options.onSuccess(data);
+				this._options.onComplete(data);
+			}
+		}.bind(this);
+		this.ajax.onerror = function(data) {
+			if (this._options.context != null) {
+				this._options.onFailure.call(this._options.context, data);
+				this._options.onComplete.call(this._options.context, data);
+			} else {
+				this._options.onFailure(data);
+				this._options.onComplete(data);
+			}
+		}.bind(this);
+		this.parameters = this.prepare_parameters(this._options.parameters);
+	},
+	
+	request: function() {
+		this.ajax.post(this._url, this.parameters);
+		if (this._options.context != null) {
+			this._options.onLoading.call(this._options.context);
+		} else {
+			this._options.onLoading();
+		}	
+	},
+	
+	prepare_parameters: function(params) {
+		if (isHash(params)) {
+			return params;
 		}
-	}
-	if (options["onFailure"]) {
-		this.ajax.onerror = options["onFailure"];
-	}
-
-	// Yes, this is an excercise in undoing what we just did
-	// FB doesn't provide encodeURI, but they will encode things passed as a hash
-	// so we turn it into a string, esaping & and =
-	// then we split it all back out here
-	// this could be killed if encodeURIComponent was available
-	parameters={};
-  if (options['parameters']) {
-		pairs=options['parameters'].split('&');	
-		for (var i=0; i<pairs.length; i++) {
-			kv=pairs[i].split('=');
-			key=kv[0].replace(/%3D/g,'=').replace(/%26/g,'&');
-			val=kv[1].replace(/%3D/g,'=').replace(/%26/g,'&');
-			parameters[key]=val;
+		var parameters = {};
+		if (params) {
+			pairs = params.split('&');	
+			for (var i = 0; i < pairs.length; i++) {
+				kv = pairs[i].split('=');
+				key = kv[0].replace(/%3D/g,'=').replace(/%26/g,'&');
+				val = kv[1].replace(/%3D/g,'=').replace(/%26/g,'&');
+				parameters[key] = val;
+			}
 		}
+		return parameters;
 	}
-  this.ajax.post(url,parameters);	
-	if (options["onLoading"]) {
-     options["onLoading"].call() 
-  }
-};
-Ajax.Request = function(url,options) {
-	Ajax.Updater('unused',url,options);
-};
-
-PeriodicalExecuter = function (callback, frequency) {
-        setTimeout(callback, frequency *1000);
-        setTimeout(function() { new PeriodicalExecuter(callback,frequency); }, frequency*1000);
-};
+});
 
 
 function toJSON(object) {
