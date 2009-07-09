@@ -116,10 +116,10 @@ function $(element) {
 
 var Element = {
 	"hide": function () {
-		this.setStyle("display","none")
+		Animation(this).duration(0).hide().go();
 	},
 	"show": function () {
-		this.setStyle("display","block")
+		Animation(this).duration(0).show().go();
 	},
 	"visible": function () {
 		return (this.getStyle("display") != "none");
