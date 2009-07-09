@@ -417,7 +417,7 @@ function isArray(object) {
 }
 
 function isHash(object) {
-  return object instanceof Hash;
+	return (typeof object == "object") && !isArray(object);
 }
 
 function isFunction(object) {
