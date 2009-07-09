@@ -8,6 +8,11 @@
  * 
  *--------------------------------------------------------------------------*/
 
+function extend_instance(destination, source) {
+  for (var property in source)
+    destination[property] = source[property];
+  return destination;
+}
 
 var Node = {};
 if (!Node.ELEMENT_NODE) {
@@ -426,12 +431,6 @@ function camelize(string) {
 		camelized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);
 
 	return camelized;
-}
-
-function extend_instance(destination, source) {
-  for (var property in source)
-    destination[property] = source[property];
-  return destination;
 }
 
 function bind(functionName, obj, params) {
