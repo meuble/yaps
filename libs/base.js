@@ -565,5 +565,5 @@ var Position = {
 	},
 
 	cumulativeOffset: Element.Methods.cumulativeOffset,
-	realOffset: Element.Methods.cumulativeScrollOffset,
+	realOffset: Element.Methods.cumulativeScrollOffset
 }
