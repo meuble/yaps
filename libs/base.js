@@ -257,6 +257,24 @@ Element.Methods = {
 	}
 }
 
+function $$(className, tag, parentContainer){
+       var testClass = new RegExp("(\s)*" + className + "(\s)*");
+       var tag = tag || "*";
+       var parentContainer = $(parentContainer) || document;
+       var elements = (tag == "*" && elm.all)? elm.all : parentContainer.getElementsByTagName(tag);
+       var returnElements = [];
+       var current;
+       var length = elements.length;
+       for(var i = 0; i < length; i++){
+               current = elements[i];
+               if(testClass.test(current.getClassName())){
+               returnElements.push(current);            
+               }
+       }
+       return returnElements;
+}
+
+
 function inspect(object) {
     try {
       if (isUndefined(object)) return 'undefined';
